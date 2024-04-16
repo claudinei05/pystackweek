@@ -1,6 +1,9 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.messages import constants
+from django.contrib import messages
+
 
 # Create your views here.
 def cadastro(request):
@@ -13,18 +16,18 @@ def cadastro(request):
         confirmar_senha=request.POST.get('confirmar_senha')
 
         if senha != confirmar_senha:
-            print("ERRO 2: O campo senha e confirme senha não são iguais")
+            messages.add_message(request, constants.ERROR, 'ERRO 2: O campo senha e confirme senha não são iguais')
             return redirect('/usuarios/cadastro')
         
         if len(senha) < 6:
-            print('ERRO 3: Senha precisa de no minimo 6 caracteres')
+            messages.add_message(request, constants.ERROR, 'ERRO 3: Senha precisa de no minimo 6 caracteres')
             return redirect('/usuarios/cadastro')
         
         users= User.objects.filter(username=username)
         print(users.exists())
 
         if users.exists():
-            print("ERRO 1 Usuario ja existe")
+            messages.add_message(request, constants.ERROR, 'ERRO 1 Usuario ja existe')
             return redirect('/usuarios/cadastro')
         
         user=User.objects.create_user(
@@ -33,5 +36,6 @@ def cadastro(request):
             password=senha
         )
         
-        return HttpResponse(f'Usuario criado com sucesso')
+        return redirect('/usuarios/login')
     
+
