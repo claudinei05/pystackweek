@@ -57,7 +57,8 @@ def abrir_horario(request):
         return redirect('/usuarios/sair')
 
     if request.method == "GET":
-        return render(request, 'abrir_horario.html')
+        dados_medicos= DadosMedico.objects.get(user = request.user)
+        return render(request, 'abrir_horario.html', {'dados_medicos': dados_medicos})
     
      
 
