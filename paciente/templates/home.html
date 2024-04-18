@@ -19,17 +19,17 @@
         <div class="col-md-8">            
 
             <p style="font-size: 25px" class="p-bold">Olá, <span class="color-dark">{{request.user.username}}.</span></p>
-            <form action="" post="GET">
+            <form action="{% url 'home' %}" post="GET">
                 <input type="text" class="form-control shadow-main-color" placeholder="Busque por profissionais ..." name="medico">
                 <br>
 
                 <div class="especialidades">
-                    <input type="checkbox" name="especialidades" value="">
+                    {% for especialidade in especialidades%}
+                        <input type="checkbox" name="especialidades" value="{{especialidade.id}}">
                     <span class="badge bg-secondary">
-
-                        Especialidade X
-                    
+                        {{especialidade.especialidade}}
                     </span>
+                    {% endfor %}
                     
 
                 </div>
@@ -50,9 +50,12 @@
                         </div>
                     </div>  
                     <p><i class="bi bi-map icon-main"></i>&nbsp&nbsp{{medico.rua}}, {{medico.numero}}.</p>
-                    <p><i class="bi bi-calendar2-week icon-main"></i>&nbsp&nbspProxima data: 
-                        
-                        </p>
+                    <p><i class="bi bi-calendar2-week icon-main"></i>&nbsp&nbspProxima data:</p>
+                    {% if medico.proxima_data %}
+                        {{medico.proxima_data}}
+                    {% else %}
+                        Aguarde uma data.
+                    {% endif %}
                         
                     <a href="#" class="btn btn-success btn-dark-color">Agendar</a>
                 </div>
